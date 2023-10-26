@@ -42,7 +42,13 @@ public class ChromaKey extends BinaryFilter {
 				Color inputColor1 = pr1.getColor(x, y);
 				Color inputColor2 = pr2.getColor(x, y);
 
-				pw.setColor(x, y, inputColor1);
+				double dHue = Math.abs(inputColor1.getHue() - hue);
+				if (dHue > 180) {
+					dHue = 360 - dHue;
+				}
+				
+				Color outputColor = dHue < delta ? inputColor2 : inputColor1;
+				pw.setColor(x, y, outputColor);
 			}
 		}
 		
