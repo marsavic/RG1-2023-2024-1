@@ -19,7 +19,12 @@ public class Saturate extends ColorFilter {
 	public Color processColor(Color input) {
 		double s = input.getSaturation();
 		
-		return null;
+		return Color.hsb(
+				input.getHue(),
+				s + k * (1 - s),          // Linearna interpolacija. Kada k ide od 0 do 1, ovaj izraz ide od s do 1.
+				input.getBrightness(),
+				input.getOpacity()
+				);
 	}
 	
 }	
