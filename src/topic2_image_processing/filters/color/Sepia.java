@@ -10,7 +10,12 @@ public class Sepia extends ColorFilter {
 
 	@Override
 	public Color processColor(Color input) {
-		return null;
+		return Color.hsb(
+				43,
+				0.5,
+				input.getBrightness(),
+				input.getOpacity()
+				);
 	}
 	
 }
