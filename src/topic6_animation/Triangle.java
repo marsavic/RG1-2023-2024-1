@@ -36,6 +36,33 @@ public class Triangle implements Drawing {
 	public void draw(View view) {
 		DrawingUtils.clear(view, Color.gray(0.125));
 		
+		view.setLineJoin(StrokeLineJoin.ROUND);
+		view.setStroke(Color.BLUE);
+		view.setLineWidth(5);
+		view.strokePolygon(p0, p1, p2);
+		
+		double l0 = p0.distanceTo(p1);
+		double l1 = p1.distanceTo(p2);
+		double l2 = p2.distanceTo(p0);
+		double l = l0 + l1 + l2;
+		
+		double t0 = 0;
+		double t1 = t0 + l0;
+		double t2 = t1 + l1;
+		
+		double t = Numeric.mod(time * speed, l);
+		
+		Vector q0, q1;
+		double k;
+		
+		if(t < t1) {q0 = p0; q1 = p1; k = (t - t0)/l0;} else
+		if(t < t2) {q0 = p1; q1 = p2; k = (t - t1)/l1;} else
+				   {q0 = p2; q1 = p0; k = (t - t2)/l2;}
+		
+		Vector p = Vector.lerp(q0, q1, smootherstep(k));
+		
+		view.setFill(Color.ORANGE);
+		view.fillCircleCentered(p, 20);
 	}
 	
 	private double smootherstep(double x) {
