@@ -40,7 +40,19 @@ public class MorphingAndKeyframes implements Drawing {
 	@GadgetInteger(min = 1, max = maxNKeyframes)
 	int nStates = 3;
 	
-
+	@Override
+	public void init(View view) {
+		polygons = new Vector[maxNKeyframes][maxNVertices];
+		hues = new double[maxNKeyframes];
+		
+		for(int k = 0; k < maxNKeyframes; k++) {
+			
+			for(int i = 0; i < maxNVertices; i++) {
+				polygons[k][i] = Vector.randomInBox(fieldP, fieldD);
+			}
+			hues[k] = Math.random() * 360;
+		}
+	}
 	
 	double smootherstep(double x) {
 		// 6x^5 - 15x^4 + 10x^3
@@ -52,7 +64,35 @@ public class MorphingAndKeyframes implements Drawing {
 	public void draw(View view) {
 		DrawingUtils.clear(view, Color.hsb(0, 0, 0.2));
 	
+		if(showKeyframes) {
+			view.setLineDashes(4);
+			view.setLineCap(StrokeLineCap.BUTT);
+			view.setLineJoin(StrokeLineJoin.ROUND);
+			view.setLineWidth(1);
+			view.setStroke(Color.hsb(0, 0, 1, 0.2));
+			for(int k = 0; k < nStates; k++) {
+				view.strokePolygon(nVertices, polygons[k]);
+			}
+		}
+		view.setLineCap(null);
 		
+		int k0 = (int) (time / stateDuration) % nStates;
+		int k1 = (k0 + 1) % nStates;
+		
+		double t = (time % stateDuration) / stateDuration;
+		
+		t = smootherstep(t);
+		
+		Vector[] polygon = new Vector[nVertices];
+		for(int i = 0; i < nVertices; i++) {
+			polygon[i] = Vector.lerp(polygons[k0][i], polygons[k1][i], t);
+		}
+		
+		Color c0 = Color.hsb(hues[k0], 0.7, 0.7, 0.7);
+		Color c1 = Color.hsb(hues[k1], 0.7, 0.7, 0.7);
+		
+		view.setFill(c0.interpolate(c1, t));
+		view.fillPolygon(polygon);
 	}
 	
 	
