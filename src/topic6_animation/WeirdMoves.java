@@ -31,7 +31,20 @@ public class WeirdMoves implements Drawing {
 	public void draw(View view) {
 		DrawingUtils.clear(view, Color.hsb(0, 0, 0.1));
 		
+		Vector[] p = new Vector[n];
+		Vector[] q = new Vector[n];
 		
+		double theta = omega * time;
+		
+		for(int i = 0; i < n; i++) {
+			double phi = 1.0 * i / n + theta;
+			p[i] = Vector.polar(r, phi);
+			q[i] = Vector.polar(r, -phi);
+		}
+		
+		view.setFill(Color.CORNFLOWERBLUE);
+		view.fillPolygon(p);
+		view.fillPolygon(q);
 	}		
 	
 	
