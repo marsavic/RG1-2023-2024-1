@@ -12,6 +12,11 @@ public class Box_Formula extends Box {
 	Vector areaD;
 	
 
+	public Box_Formula(Vector areaD2, Vector randomInBox, Vector randomGaussian, Color hsb) {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	@Override
 	public Vector getPosition(double time) {
 		return areaD;			
