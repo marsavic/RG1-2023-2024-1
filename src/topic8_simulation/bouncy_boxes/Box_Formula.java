@@ -12,20 +12,38 @@ public class Box_Formula extends Box {
 	Vector areaD;
 	
 
-	public Box_Formula(Vector areaD2, Vector randomInBox, Vector randomGaussian, Color hsb) {
-		// TODO Auto-generated constructor stub
-	}
-
+	
+	public Box_Formula(Vector areaD, Vector p, Vector v, Color color) {
+		this.areaD = areaD;
+		this.p = p;
+		this.v = v;
+		this.color = color;
+		
+		this.t = 0;
+	}		
+	
 
 	@Override
 	public Vector getPosition(double time) {
-		return areaD;			
+		Vector bigD = areaD.mul(2);
+		
+		Vector tPeriod = bigD.div(v).abs();
+		Vector dt = new Vector(time - t).mod(tPeriod);
+
+		Vector q = p.add(v.mul(dt)).mod(bigD);
+		return areaD.sub(q.sub(areaD).abs());			
 	}
 	
 	
 	@Override
 	public Vector getVelocity(double time) {
-		return v;			
+		Vector bigD = areaD.mul(2);
+		
+		Vector tPeriod = bigD.div(v).abs();
+		Vector dt = new Vector(time - t).mod(tPeriod);
+		
+		Vector q = p.add(v.mul(dt)).mod(bigD);
+		return q.sub(areaD).signum().inverse().mul(v);			
 	}
 	
 	
